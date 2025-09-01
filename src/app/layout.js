@@ -1,9 +1,19 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Cinzel_Decorative, Cinzel } from "next/font/google";
 import "./globals.css";
-
+import Link from "next/link";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+const cinzelDecorative = Cinzel_Decorative({
+  variable: "--font-cinzel-decorative",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["600"],
 });
 
 const geistMono = Geist_Mono({
@@ -17,11 +27,45 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // Common classNames and styles
+  const navItemClass = `${cinzel.className}  text-2xl leading-none text-center align-middle text-[#E1C47382]  opacity-0 animate-fadein hover:opacity-100`;
+  const navItemStyle = {
+    textShadow: "0px 1.5px 4px #E1C47382",
+  };
+  const buttonClass = `${cinzelDecorative.className} font-bold text-5xl leading-none text-center align-middle text-[#E1C47382] backdrop-blur-[11.02px] opacity-0 animate-fadein hover:opacity-100 cursor-pointer`;
+  const buttonStyle = {
+    textShadow: "0px 0px 5px #FFFFFF81, 0px 0px 0px #BD8D6181",
+  };
+  // Add fade-in animation keyframes to the global stylesheet if not present
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cinzelDecorative.variable} antialiased text-[#E1C47382]`}
       >
+        <nav className="p-8 px-12 mb-6 flex justify-between items-center">
+          <ul className="flex items-center gap-12">
+            <li className={navItemClass} style={navItemStyle}>
+              <Link href="/">Home</Link>
+            </li>
+            <li className={navItemClass} style={navItemStyle}>
+              <Link href="/about">About</Link>
+            </li>
+            <li className={navItemClass} style={navItemStyle}>
+              <Link href="/events">Events</Link>
+            </li>
+            <li className={navItemClass} style={navItemStyle}>
+              <Link href="/sponsor">Sponsor</Link>
+            </li>
+            <li className={navItemClass} style={navItemStyle}>
+              <Link href="/gallery">Gallery</Link>
+            </li>
+          </ul>
+          <button className={buttonClass} style={buttonStyle}>
+            REGISTER
+          </button>
+        </nav>
+
         {children}
       </body>
     </html>
