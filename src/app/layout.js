@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono, Cinzel_Decorative, Cinzel } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Link from "next/link";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -38,6 +40,17 @@ export default function RootLayout({ children }) {
   };
   // Add fade-in animation keyframes to the global stylesheet if not present
 
+  // Mobile navigation classes - smaller and more compact
+  const navItemClass = `${cinzel.className} text-[30px] leading-none text-center align-middle text-[#E1C47382] opacity-0 animate-fadein hover:opacity-100 transition-opacity duration-300 whitespace-nowrap`;
+  const navItemStyle = {
+    textShadow: "0px 1.5px 4px #E1C47382",
+  };
+
+  const buttonClass = `${cinzelDecorative.className} font-bold text-[10px] sm:text-lg md:text-2xl lg:text-4xl xl:text-5xl leading-none text-center align-middle text-[#E1C47382] backdrop-blur-[11.02px] opacity-0 animate-fadein hover:opacity-100 cursor-pointer transition-opacity duration-300 px-1 sm:px-4 py-1 sm:py-2 whitespace-nowrap`;
+  const buttonStyle = {
+    textShadow: "0px 0px 5px #FFFFFF81, 0px 0px 0px #BD8D6181",
+  };
+
   return (
     <html lang="en">
       <body
@@ -65,7 +78,49 @@ export default function RootLayout({ children }) {
             REGISTER
           </button>
         </nav>
+        className=
+        {`${geistSans.variable} ${geistMono.variable} ${cinzelDecorative.variable} antialiased text-[#E1C47382] bg-transparent m-0 p-0`}
+        style={{ margin: 0, padding: 0 }}>
+        {/* Mobile Navigation - Single Line */}
+        <nav className="absolute top-0 left-0 right-0 z-10 p-1 sm:p-4 md:p-6 lg:p-8 px-1 sm:px-4 md:px-8 lg:px-12 flex justify-between items-center">
+          {/* Navigation Links */}
+          <div className="flex-1">
+            <ul className="flex items-center gap-1 sm:gap-2 md:gap-4 lg:gap-8 xl:gap-12">
+              <li className={navItemClass} style={navItemStyle}>
+                <Link href="/" className="block px-1 py-1">
+                  Home
+                </Link>
+              </li>
+              <li className={navItemClass} style={navItemStyle}>
+                <Link href="/about" className="block px-1 py-1">
+                  About
+                </Link>
+              </li>
+              <li className={navItemClass} style={navItemStyle}>
+                <Link href="/events" className="block px-1 py-1">
+                  Events
+                </Link>
+              </li>
+              <li className={navItemClass} style={navItemStyle}>
+                <Link href="/sponsor" className="block px-1 py-1">
+                  Sponsor
+                </Link>
+              </li>
+              <li className={navItemClass} style={navItemStyle}>
+                <Link href="/gallery" className="block px-1 py-1">
+                  Gallery
+                </Link>
+              </li>
+            </ul>
+          </div>
 
+          {/* Register Button - Fixed on right */}
+          <div className="flex-shrink-0 ml-1 sm:ml-4">
+            <button className={buttonClass} style={buttonStyle}>
+              REGISTER
+            </button>
+          </div>
+        </nav>
         {children}
       </body>
     </html>
