@@ -1,56 +1,52 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Sponsor from "../../../components/Sponsor";
 import ScrollBar from "../../../components/ScrollBar";
-import { useRef } from "react";
+import { handleWheel, getScale, getTranslate, darkToLight, setScale, setOpacity } from "../../../components/Functions";
+import { useState, useRef, useEffect } from "react";
 
 export default function Sponsors() {
-  const handleWheel = (e) => {
-    const thumb = document.querySelector(".thumb");
-    const main = document.querySelector(".main");
-    if (!thumb || !main) return;
+  const [thumbTop, setThumbTop] = useState(10);
 
-    let currentTop = parseInt(thumb.style.top || "0", 10);
-    let delta = e.deltaY > 0 ? 20 : -20;
-
-    currentTop += delta;
-
-    const mainHeight = main.clientHeight;
-    const thumbHeight = thumb.clientHeight;
-    if(currentTop < 10) {
-      currentTop = 10;
-    } 
-    if(currentTop > mainHeight - thumbHeight - 10) {
-      currentTop = mainHeight - thumbHeight - 10;
+  useEffect(() => {
+    if (thumbTop >= 150) {
+      document.querySelector('.scroll').style.display = "none";
+    } else {
+      document.querySelector('.scroll').style.display = "block"
     }
-
-    thumb.style.top = `${currentTop}px`;
-
-  };
+  }, [thumbTop])
 
   return (
     <>
-      <div onWheel={handleWheel}>
-        <ScrollBar />
-      </div>
-      <div className="main relative w-screen h-screen overflow-hidden" onWheel={handleWheel} >
+      <div className="main relative w-screen h-[100%] overflow-hidden" onWheel={(e) => handleWheel(e, setThumbTop)} >
+        <div className="scroll">
+          <ScrollBar setThumbTop={setThumbTop} thumbTop={thumbTop} />
+        </div>
         <Image
-          src="/sponsors-bg.svg"
+          src="/Sponsors.svg"
           alt="Background"
           fill
           className="object-cover"
           draggable={false}
         />
-        <nav>
+        <nav></nav>
 
-        </nav>
-        {/* <div className="bg-black z-10 absolute inset-0 w-screen h-screen opacity-25"></div> */}
+        <div className="bg-black z-10 absolute inset-0 w-screen h-screen"
+          style={{ opacity: darkToLight(thumbTop) / 100 }}
+        ></div>
         <div className="flex flex-1 justify-center items-center h-screen list">
-          <div>
+          <div className="first relative z-30"
+            style={{ transform: `scale(${getScale(thumbTop)}) translateY(${getTranslate(thumbTop)}%)` }}
+          >
             <Sponsor />
           </div>
-          <div>
-
+          <div className="second absolute origin-bottom z-20 will-change-[transform,opacity] backdrop-blur-md"
+            style={{
+              transform: `scale(${setScale(thumbTop)})`,
+              opacity: setOpacity(thumbTop),
+            }}
+          >
+            <Sponsor />
           </div>
         </div>
       </div>
