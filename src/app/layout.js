@@ -1,17 +1,18 @@
 import { Geist, Geist_Mono, Cinzel_Decorative, Cinzel } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
 const cinzelDecorative = Cinzel_Decorative({
   variable: "--font-cinzel-decorative",
   subsets: ["latin"],
   weight: ["400"],
 });
+
 const cinzel = Cinzel({
   variable: "--font-cinzel",
   subsets: ["latin"],
@@ -29,24 +30,13 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  // Common classNames and styles
-  const navItemClass = `${cinzel.className}  text-2xl leading-none text-center align-middle text-[#E1C47382]  opacity-0 animate-fadein hover:opacity-100`;
-  const navItemStyle = {
-    textShadow: "0px 1.5px 4px #E1C47382",
-  };
-  const buttonClass = `${cinzelDecorative.className} font-bold text-5xl leading-none text-center align-middle text-[#E1C47382] backdrop-blur-[11.02px] opacity-0 animate-fadein hover:opacity-100 cursor-pointer`;
-  const buttonStyle = {
-    textShadow: "0px 0px 5px #FFFFFF81, 0px 0px 0px #BD8D6181",
-  };
-  // Add fade-in animation keyframes to the global stylesheet if not present
-
   // Mobile navigation classes - smaller and more compact
-  const navItemClass = `${cinzel.className} text-[30px] leading-none text-center align-middle text-[#E1C47382] opacity-0 animate-fadein hover:opacity-100 transition-opacity duration-300 whitespace-nowrap`;
+  const navItemClass = `${cinzel.className} text-2xl leading-none text-center align-middle text-[#E1C47382] opacity-0 animate-fadein hover:opacity-100 transition-opacity duration-300 whitespace-nowrap`;
   const navItemStyle = {
     textShadow: "0px 1.5px 4px #E1C47382",
   };
 
-  const buttonClass = `${cinzelDecorative.className} font-bold text-[10px] sm:text-lg md:text-2xl lg:text-4xl xl:text-5xl leading-none text-center align-middle text-[#E1C47382] backdrop-blur-[11.02px] opacity-0 animate-fadein hover:opacity-100 cursor-pointer transition-opacity duration-300 px-1 sm:px-4 py-1 sm:py-2 whitespace-nowrap`;
+  const buttonClass = `${cinzelDecorative.className} font-bold text-[10px] sm:text-lg md:text-2xl lg:text-4xl  leading-none text-center align-middle text-[#E1C47382] backdrop-blur-[11.02px] opacity-0 animate-fadein hover:opacity-100 cursor-pointer transition-opacity duration-300 px-1 sm:px-4 py-1 sm:py-2 whitespace-nowrap`;
   const buttonStyle = {
     textShadow: "0px 0px 5px #FFFFFF81, 0px 0px 0px #BD8D6181",
   };
@@ -54,33 +44,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cinzelDecorative.variable} antialiased text-[#E1C47382]`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cinzelDecorative.variable} antialiased text-[#E1C47382] bg-transparent m-0 p-0`}
+        style={{ margin: 0, padding: 0 }}
       >
-        <nav className="p-8 px-12 mb-6 flex justify-between items-center">
-          <ul className="flex items-center gap-12">
-            <li className={navItemClass} style={navItemStyle}>
-              <Link href="/">Home</Link>
-            </li>
-            <li className={navItemClass} style={navItemStyle}>
-              <Link href="/about">About</Link>
-            </li>
-            <li className={navItemClass} style={navItemStyle}>
-              <Link href="/events">Events</Link>
-            </li>
-            <li className={navItemClass} style={navItemStyle}>
-              <Link href="/sponsor">Sponsor</Link>
-            </li>
-            <li className={navItemClass} style={navItemStyle}>
-              <Link href="/gallery">Gallery</Link>
-            </li>
-          </ul>
-          <button className={buttonClass} style={buttonStyle}>
-            REGISTER
-          </button>
-        </nav>
-        className=
-        {`${geistSans.variable} ${geistMono.variable} ${cinzelDecorative.variable} antialiased text-[#E1C47382] bg-transparent m-0 p-0`}
-        style={{ margin: 0, padding: 0 }}>
         {/* Mobile Navigation - Single Line */}
         <nav className="absolute top-0 left-0 right-0 z-10 p-1 sm:p-4 md:p-6 lg:p-8 px-1 sm:px-4 md:px-8 lg:px-12 flex justify-between items-center">
           {/* Navigation Links */}
@@ -102,13 +68,18 @@ export default function RootLayout({ children }) {
                 </Link>
               </li>
               <li className={navItemClass} style={navItemStyle}>
+                <Link href="/gallery" className="block px-1 py-1">
+                  Gallery
+                </Link>
+              </li>
+              <li className={navItemClass} style={navItemStyle}>
                 <Link href="/sponsor" className="block px-1 py-1">
                   Sponsor
                 </Link>
               </li>
               <li className={navItemClass} style={navItemStyle}>
-                <Link href="/gallery" className="block px-1 py-1">
-                  Gallery
+                <Link href="/contact" className="block px-1 py-1">
+                  Contact Us
                 </Link>
               </li>
             </ul>
@@ -121,6 +92,7 @@ export default function RootLayout({ children }) {
             </button>
           </div>
         </nav>
+
         {children}
       </body>
     </html>
