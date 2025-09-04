@@ -10,16 +10,23 @@ export default function Sponsors() {
 
   useEffect(() => {
     document.querySelector('.scroll').style.opacity = (thumbTop == 150) ? 0 : 1;
-  }, [thumbTop])
+
+    const main = document.querySelector(".main");
+    if (!main) return;
+    const touchMoveHandler = (e) => handleTouchMove(e, setThumbTop, thumbTop);
+    main.addEventListener("touchmove", touchMoveHandler, { passive: false });
+
+    return () => {
+      main.removeEventListener("touchmove", touchMoveHandler);
+    }
+  }, [thumbTop]);
 
   return (
     <>
-      <div
-        className="main relative w-screen h-[100%] overflow-hidden"
+      <div className="main relative w-screen h-[100%] overflow-hidden"
         onWheel={(e) => handleWheel(e, setThumbTop)}
-        onTouchStart={handleTouchStart}
-        onTouchMove={(e) => handleTouchMove(e, setThumbTop)}
         onTouchEnd={() => handleTouchEnd(setThumbTop)}
+        onTouchStart={handleTouchStart}
       >
         <div className="scroll h-screen absolute top-0 right-0 z-30 transition-opacity duration-100 ease-linear">
           <ScrollBar setThumbTop={setThumbTop} thumbTop={thumbTop} />
@@ -38,7 +45,7 @@ export default function Sponsors() {
         ></div>
         <div className="flex flex-1 justify-center items-center h-screen list">
           <div className="first relative z-30"
-            style={{ transform: `scale(${getScale(thumbTop)}) translateY(calc(${getTranslate(thumbTop)}vh + ${getTranslate(thumbTop)}%))` }}
+            style={{ transform: `scale(${getScale(thumbTop)}) translateY(${getTranslate(thumbTop)})` }}
           >
             <Sponsor />
           </div>
