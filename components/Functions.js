@@ -1,33 +1,28 @@
 "use client"
 const MIN_TOP = 10;
-const MAX_TOP = 110;
+const MAX_TOP = 75;
 const MIN_SCALE = 1;
 const MAX_SCALE = 2;
-const MAX_TOP_TY = 150;
 const MIN_TRANSLATE = 0;
-const MAX_TRANSLATE = 100;
+const MAX_TRANSLATE = 50;
+
+let wheelAnimationFrame = null, wheelTargetTop = null;
 
 export function handleWheel(e, setThumbTop) {
   const thumb = document.querySelector(".thumb");
-  const main = document.querySelector(".main");
-  if (!thumb || !main) return;
+  if (!thumb) return;
 
-  let currentTop = parseInt(thumb.style.top || "0", 10);
-  let delta = e.deltaY > 0 ? 10 : -10;
+  wheelTargetTop = Math.max(10, Math.min((parseInt(thumb.style.top || 0, 10) + (e.deltaY > 0 ? 30 : -30)), 150));
+  if (wheelAnimationFrame) cancelAnimationFrame(wheelAnimationFrame);
 
-  currentTop += delta;
+  (function animate() {
+    let current = parseFloat(thumb.style.top || 0), diff = wheelTargetTop - current;
+    if (Math.abs(diff) < 1) { thumb.style.top = `${wheelTargetTop}px`; setThumbTop(wheelTargetTop); wheelAnimationFrame = null; return; }
+    thumb.style.top = `${current + diff * 0.2}px`; setThumbTop(current + diff * 0.2);
+    wheelAnimationFrame = requestAnimationFrame(animate);
+  })();
+}
 
-  if (currentTop < 10) {
-    currentTop = 10;
-  }
-  if (currentTop > 150) {
-    currentTop = 150;
-  }
-
-  thumb.style.top = `${currentTop}px`;
-  setThumbTop(currentTop);
-
-};
 
 export function getScale(thumbTop) {
   const clampedTop = Math.max(MIN_TOP, Math.min(thumbTop, MAX_TOP));
@@ -35,9 +30,18 @@ export function getScale(thumbTop) {
   return scale;
 }
 
+const MIN_SCALE_SP = 0.5;
+const MAX_SCALE_SP = 1;
+
+export function setScale(thumbTop) {
+  const clampedTop = Math.max(75, Math.min(thumbTop, 150));
+  const scale = MIN_SCALE_SP + ((clampedTop - 75) / (150 - 75)) * (MAX_SCALE_SP - MIN_SCALE_SP);
+  return scale;
+}
+
 export function getTranslate(thumbTop) {
-  const clampedTop = Math.max(MIN_TOP, Math.min(thumbTop, MAX_TOP_TY));
-  const translate = ((clampedTop - MIN_TRANSLATE - 10) / (MAX_TOP_TY - MIN_TOP)) * (MAX_TRANSLATE - MIN_TRANSLATE);
+  const clampedTop = Math.max(MIN_TOP, Math.min(thumbTop, 150));
+  const translate = ((clampedTop - MIN_TRANSLATE-10) / (150 - MIN_TOP)) * (MAX_TRANSLATE - MIN_TRANSLATE);
   return translate;
 }
 
@@ -49,16 +53,7 @@ export function darkToLight(thumbTop) {
   return opacity;
 }
 
-const MIN_SCALE_SP = 0.5;
-const MAX_SCALE_SP = 1;
-const MIN_TOP_SP = 110
-const MAX_TOP_SP = 150
 
-export function setScale(thumbTop) {
-  const clampedTop = Math.max(MIN_TOP_SP, Math.min(thumbTop, MAX_TOP_SP));
-  const scale = MIN_SCALE_SP + ((clampedTop - MIN_TOP_SP) / (MAX_TOP_SP - MIN_TOP_SP)) * (MAX_SCALE_SP - MIN_SCALE_SP);
-  return scale;
-}
 
 const MIN_OPACITY_SP = 0;
 const MAX_OPACITY_SP = 1;
@@ -68,3 +63,73 @@ export function setOpacity(thumbTop) {
   return ((clampedTop - MIN_TOP) / ((MAX_TOP / 2) - MIN_TOP)) * (MAX_OPACITY_SP - MIN_OPACITY_SP) + MIN_OPACITY_SP;
 }
 
+
+
+
+let touchStartY = 0;
+let velocity = 0;
+
+export function handleTouchStart(e) {
+  touchStartY = e.touches[0].clientY;
+  velocity = 0;
+  if (wheelAnimationFrame) cancelAnimationFrame(wheelAnimationFrame);
+}
+
+export function handleTouchMove(e, setThumbTop) {
+  e.preventDefault();
+  const thumb = document.querySelector(".thumb");
+  if (!thumb) return;
+
+  const touchY = e.touches[0].clientY;
+  const delta = touchStartY - touchY;
+  touchStartY = touchY;
+
+  velocity = delta;
+
+  wheelTargetTop = Math.max(10, Math.min(parseFloat(thumb.style.top || 0) + delta, 150));
+
+  if (wheelAnimationFrame) cancelAnimationFrame(wheelAnimationFrame);
+
+  (function animate() {
+    let current = parseFloat(thumb.style.top || 0);
+    let diff = wheelTargetTop - current;
+    if (Math.abs(diff) < 1) {
+      thumb.style.top = `${wheelTargetTop}px`;
+      setThumbTop(wheelTargetTop);
+      wheelAnimationFrame = null;
+      return;
+    }
+    thumb.style.top = `${current + diff * 0.2}px`;
+    setThumbTop(current + diff * 0.2);
+    wheelAnimationFrame = requestAnimationFrame(animate);
+  })();
+}
+
+export function handleTouchEnd(setThumbTop) {
+  const thumb = document.querySelector(".thumb");
+  if (!thumb) return;
+
+  if (Math.abs(velocity) < 1) return;
+
+  wheelTargetTop = Math.max(10, Math.min(parseFloat(thumb.style.top || 0) + velocity * 5, 150));
+
+  if (wheelAnimationFrame) cancelAnimationFrame(wheelAnimationFrame);
+
+  (function animate() {
+    let current = parseFloat(thumb.style.top || 0);
+    let diff = wheelTargetTop - current;
+
+    velocity *= 0.95;
+
+    if (Math.abs(diff) < 0.5 || Math.abs(velocity) < 0.5) {
+      thumb.style.top = `${wheelTargetTop}px`;
+      setThumbTop(wheelTargetTop);
+      wheelAnimationFrame = null;
+      return;
+    }
+
+    thumb.style.top = `${current + diff * 0.2}px`;
+    setThumbTop(current + diff * 0.2);
+    wheelAnimationFrame = requestAnimationFrame(animate);
+  })();
+}
