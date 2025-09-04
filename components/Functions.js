@@ -90,7 +90,7 @@ export function handleTouchMove(e, setThumbTop, thumbTop) {
 
   const isPullingDown = delta < 0;
   if (!(thumbTop === MIN_TOP && isPullingDown)) e.preventDefault();
-  
+
 
   wheelTargetTop = Math.max(10, Math.min(parseFloat(thumb.style.top || 0) + delta, 150));
 
@@ -105,7 +105,7 @@ export function handleTouchMove(e, setThumbTop, thumbTop) {
       wheelAnimationFrame = null;
       return;
     }
-    thumb.style.top = `${current + diff * 0.2}px`;
+    thumb.style.top = `${current + diff * 0.5}px`;
     setThumbTop(current + diff * 0.5);
     wheelAnimationFrame = requestAnimationFrame(animate);
   })();
