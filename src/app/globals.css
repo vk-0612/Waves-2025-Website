@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+* {
+    user-select: none;
+}
+
+.sponsor {
+    border: 1px solid transparent;
+    border-image: linear-gradient(to bottom, transparent, #d9d9d925) 1;
+}

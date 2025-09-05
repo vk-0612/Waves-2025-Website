@@ -2,16 +2,6 @@
 import { useState, useEffect } from "react";
 
 export default function ScrollBar({ setThumbTop, thumbTop }) {
-  const [height, setHeight] = useState(0);
-  const thumbHeight = 35;
-
-  useEffect(() => {
-    const track = document.querySelector(".track");
-    if (track) {
-      setHeight(track.clientHeight);
-    }
-  }, []);
-
   const handleDrag = (e) => {
     e.preventDefault();
     const startY = e.clientY;
@@ -21,7 +11,7 @@ export default function ScrollBar({ setThumbTop, thumbTop }) {
       const deltaY = moveEvent.clientY - startY;
       const newTop = Math.min(
         Math.max(startTop + deltaY, 10),
-        150
+         200
       );
       setThumbTop(newTop);
     };
@@ -38,12 +28,8 @@ export default function ScrollBar({ setThumbTop, thumbTop }) {
   return (
     <>
       <div
-        className="bg-[#D9D9D9] opacity-20 absolute right-0 z-20 h-full w-[5px] track"
-      >
-      </div>
-      <div
         onMouseDown={handleDrag}
-        className="absolute w-[5px] bg-[#D9D9D9] rounded-4xl cursor-pointer z-20 top-0 right-0 h-[35px] thumb"
+        className="absolute w-[12px] bg-[#D9D9D9] rounded-4xl cursor-pointer z-20 top-0 right-0 h-[75px] thumb"
         style={{
 
           top: `${thumbTop}px`,
