@@ -68,30 +68,30 @@ export default function Sponsors() {
           </div>
 
           {list.map((style, i) =>
-            <div
-              key={i}
-              className={`absolute z-30 origin-top grid bg-transparent backdrop-blur-lg ${isLargeScreen ? `grid-cols-3 gap-[2vw]` : `grid-cols-2 gap-[5vw]`}`}
-              style={{
-                transform: `scale(${setScale(
-                  thumbTop,
-                  style.range[0] + 10,
-                  style.range[1]
-                )}) ${style.translate
-                  ? `translateY(${getTranslate(
+              <div
+                key={i}
+                className={`absolute z-30 origin-top grid bg-transparent backdrop-blur-lg ${isLargeScreen?`grid-cols-3 gap-[2vw]`:`grid-cols-2 gap-[5vw]`}`}
+                style={{
+                  transform: `scale(${setScale(
                     thumbTop,
-                    style.translate[0],
-                    style.translate[1]
-                  )}) scale(${getScale(thumbTop, style.translate[0], style.translate[1])})`
-                  : ""
-                  }`,
-                opacity: setOpacity(thumbTop, style.range[0], style.range[1]),
-              }}
-            >
-              <Sponsor />
-              <Sponsor />
-              <Sponsor />
-              {isLargeScreen ? "" : <Sponsor />}
-            </div>
+                    style.range[0]+10,
+                    style.range[1]
+                  )}) ${style.translate
+                    ? `translateY(${getTranslate(
+                      thumbTop,
+                      style.translate[0],
+                      style.translate[1]
+                    )}) scale(${getScale(thumbTop, style.translate[0], style.translate[1])})`
+                    : ""
+                    }`,
+                  opacity: setOpacity(thumbTop, style.range[0], style.range[1]),
+                }}
+              >
+                <Sponsor />
+                <Sponsor />
+                <Sponsor />
+                {isLargeScreen?"":<Sponsor />}
+              </div>
           )}
         </div>
       </div>
