@@ -73,8 +73,8 @@ export default function RootLayout({ children }) {
                 </Link>
               </li>
               <li className={navItemClass} style={navItemStyle}>
-                <Link href="/sponsor" className="block px-1 py-1">
-                  Sponsor
+                <Link href="/sponsors" className="block px-1 py-1">
+                  Sponsors
                 </Link>
               </li>
               <li className={navItemClass} style={navItemStyle}>
