@@ -8,7 +8,6 @@ export function handleWheel(e, setThumbTop) {
   if (!thumb) return;
 
   const currentTop = parseFloat(thumb.style.top || 10);
-
   const currentIdx = snapPoints.findIndex(s => s === snapPoints.reduce((prev, curr) =>
     Math.abs(curr - currentTop) < Math.abs(prev - currentTop) ? curr : prev
   ));
@@ -18,7 +17,6 @@ export function handleWheel(e, setThumbTop) {
   let nextIdx = currentIdx + direction;
   if (nextIdx < 0) nextIdx = 0;
   if (nextIdx >= snapPoints.length) nextIdx = snapPoints.length - 1;
-
   const target = snapPoints[nextIdx];
 
   if (wheelAnimationFrame) cancelAnimationFrame(wheelAnimationFrame);
@@ -95,6 +93,7 @@ export function handleTouchStart(e) {
 }
 
 export function handleTouchMove(e, setThumbTop, thumbTop) {
+  if (e.touches.length > 1) return;
   const thumb = document.querySelector(".thumb");
   if (!thumb) return;
 
